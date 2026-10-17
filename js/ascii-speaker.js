@@ -1,7 +1,7 @@
 /* ASCII Funktion-One speaker for the work overview.
-   Scrolling past it makes it thump on a 174 bpm grid: the horn pumps (glyphs
-   bulge outward) and each beat sends ASCII music notes floating up out of the
-   horn. No scroll, no motion. Needs ascii-lib.js. */
+   It always plays on a 174 bpm grid while it is on screen: the horn pumps
+   (glyphs bulge outward) every beat and ASCII music notes float up out of it.
+   Scrolling turns it up: harder pump and more notes. Needs ascii-lib.js. */
 (() => {
   "use strict";
 
@@ -30,7 +30,7 @@
   const paper = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim() || "#fff4f4";
 
   let img, grid, base;                 // base = glyph per cell of the resting speaker
-  let visible = false, running = false, raf = 0, prev = 0;
+  let visible = false, running = false, raf = 0, prev = 0, beat = 0;
   let scrollY = window.scrollY, acc = 0, speed = 0, beatIn = 0, pump = 0, drawnPump = -1;
   const notes = [];
 
@@ -187,12 +187,13 @@
     const y = window.scrollY;
     acc += Math.abs(y - scrollY);
     scrollY = y;
-    if (visible && !running && !calm.matches && grid) start();
+    if (visible) start();
   }
 
   function frame(now) {
     raf = 0;
     if (!running) return;
+    if (speed < 5 && prev && now - prev < 32) { raf = requestAnimationFrame(frame); return; }   // 30 fps when idle
     const dt = Math.min(0.1, Math.max(0.001, (now - (prev || now)) / 1000));
     prev = now;
 
@@ -202,9 +203,13 @@
     beatIn -= dt;
     if (beatIn <= 0) {
       beatIn += BEAT;
-      if (speed > 40) {                                         // scrolling: kick + notes
+      beat++;
+      if (speed > 40) {                                         // scrolling: full kick, more notes
         pump = 1;
         emit(speed > 2400 ? 3 : speed > 1100 ? 2 : 1);
+      } else {                                                  // idle: a softer pump every beat, a note every other beat
+        pump = Math.max(pump, 0.55);
+        if (beat % 2 === 0) emit(1);
       }
     }
     pump *= Math.exp(-dt * 9);
@@ -213,13 +218,12 @@
     drawHorn(pump);
     drawNotes(dt);
 
-    if (speed < 5 && !notes.length && pump === 0) { running = false; prev = 0; drawHorn(0); return; }
     raf = requestAnimationFrame(frame);
   }
 
   function start() {
-    if (running) return;
-    running = true; beatIn = 0;
+    if (running || calm.matches || document.hidden || !grid) return;
+    running = true; beatIn = 0; beat = 0;
     raf = requestAnimationFrame(frame);
   }
   function stop() {
@@ -236,13 +240,15 @@
     img = src;
     layout();
     host.classList.add("is-ready");
+    if (visible) start();
   };
   src.src = host.dataset.src;
 
   let timer = 0;
   new ResizeObserver(() => { clearTimeout(timer); timer = setTimeout(() => { if (img) layout(); }, 120); }).observe(host);
 
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (!visible) stop(); }).observe(host);
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) start(); else stop(); }).observe(host);
+  document.addEventListener("visibilitychange", () => (document.hidden ? stop() : visible && start()));
   window.addEventListener("scroll", onScroll, { passive: true });
-  calm.addEventListener("change", () => { if (calm.matches) stop(); });
+  calm.addEventListener("change", () => { if (calm.matches) stop(); else if (visible) start(); });
 })();

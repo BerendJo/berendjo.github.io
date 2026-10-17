@@ -49,7 +49,7 @@ Common pattern in every piece: pick `cols` from the element width, derive `rows 
 
 ### Speaker (`ascii-speaker.js`, work overview)
 - Markup: `.speaker.t-speaker.reveal[data-ascii-speaker]` with three canvases (`spk-static`, `spk-live`, `spk-notes`), placed in the work grid at `grid-column: 1 / 4; grid-row: 4` (left of MEZZ). `.spk-notes` overhangs the speaker (`left:-20%; width:140%; top:-20%; height:120%`); `BLEED` in the JS must match.
-- Scrolling (speed above about 40 px/s) triggers a beat every `60/174` s: the horn cells (an ellipse) bulge outward with a glyph-lookup displacement (`PUMP`), and 1 to 3 chunky ASCII music notes (3 sprites, drawn 2x2 cells each) float up from the horn, with a paper-coloured halo box so they read over the dark cabinet, dissolving into lighter glyphs. Loop stops when idle.
+- Always plays while on screen (30 fps idle): every `60/174` s beat the horn cells (an ellipse) bulge outward with a glyph-lookup displacement (`PUMP`; softer, 0.55, when idle, full when scrolling), and a chunky ASCII music note (3 sprites from `AsciiLib.NOTE_SPRITES`, drawn 2x2 cells each) floats up from the horn every other beat. Scrolling (speed above about 40 px/s) turns it up: full pump every beat and 1 to 3 notes per beat depending on speed. Notes get a paper-coloured halo box so they read over the dark cabinet and dissolve into lighter glyphs. Loop pauses off-screen / hidden tab; reduced motion = still.
 
 ### Cup (`ascii-cup.js`, Douwe Egberts)
 - Markup: `.cup[data-ascii-cup]` inside a `.p-block` (`--c: 8 / 13`) placed before the closing-text block, so the grid puts it beside the street-ad photo and pushes the text below it.
