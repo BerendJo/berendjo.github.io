@@ -553,7 +553,7 @@ html { scrollbar-color: var(--ink) var(--paper); }
 /* ---------- about ---------- */
 
 .about { padding: clamp(3rem, 8vw, 7rem) var(--gutter) clamp(4rem, 9vw, 8rem); scroll-margin-top: var(--nav-h); }
-.about-grid { max-width: 1600px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); border-top: 1.5px solid var(--ink); padding-top: clamp(1.5rem, 3vw, 2.5rem); }
+.about-grid { max-width: 1600px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); }
 .about-title { margin: 0; font-weight: 800; font-size: clamp(3.5rem, 11vw, 12rem); line-height: 0.85; letter-spacing: var(--display-track); }
 .about-photo { margin: 0; width: min(68vw, 380px); }
 .about-photo img { width: 100%; height: auto; filter: grayscale(1) contrast(1.05); }
@@ -562,10 +562,10 @@ html { scrollbar-color: var(--ink) var(--paper); }
 .about-body .about-lead { font-weight: 700; font-size: clamp(1.35rem, 2.1vw, 2rem); letter-spacing: var(--bold-track); line-height: 1.15; max-width: 30ch; }
 .about-body .about-bejo { font-weight: 700; letter-spacing: var(--bold-track); }
 @media (min-width: 900px) {
-  .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(2rem, 5vw, 4.5rem); align-items: end; }
+  .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(1rem, 2vw, 1.75rem); align-items: end; }
   .about-title { grid-column: 1 / 13; }
   .about-photo { grid-column: 8 / 13; grid-row: 2; width: 100%; max-width: 560px; justify-self: end; }
-  .about-body { grid-column: 1 / 7; grid-row: 2; padding-bottom: 0; }
+  .about-body { grid-column: 1 / 7; grid-row: 2; align-self: start; }   /* text hangs right under the title */
 }
 
 /* 404 */
