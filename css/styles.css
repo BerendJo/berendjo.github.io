@@ -165,14 +165,14 @@ html { scrollbar-color: var(--ink) var(--paper); }
   margin-bottom: clamp(9rem, 20vw, 20rem);   /* room for the part of the decks that scrolls into view */
   display: flex;
   align-items: flex-end;
-  padding: calc(var(--nav-h) + 1rem) var(--gutter) clamp(1.5rem, 4vh, 3rem);
+  padding: calc(var(--nav-h) + 1rem) var(--gutter) calc(clamp(1.5rem, 4vh, 3rem) + 14dvh);   /* copy sits well above the fold */
 }
 
 .hero-deck {
   position: absolute;
-  top: 66dvh;
-  right: -6vw;
-  width: 66vw;
+  top: 58dvh;
+  right: -5vw;
+  width: 74vw;
   aspect-ratio: 524 / 232;
   max-width: none;
   mix-blend-mode: multiply;
@@ -555,7 +555,7 @@ html { scrollbar-color: var(--ink) var(--paper); }
 .about { padding: clamp(3rem, 8vw, 7rem) var(--gutter) clamp(4rem, 9vw, 8rem); scroll-margin-top: var(--nav-h); }
 .about-grid { max-width: 1600px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); border-top: 1.5px solid var(--ink); padding-top: clamp(1.5rem, 3vw, 2.5rem); }
 .about-title { margin: 0; font-weight: 800; font-size: clamp(3.5rem, 11vw, 12rem); line-height: 0.85; letter-spacing: var(--display-track); }
-.about-photo { margin: 0; width: min(60vw, 320px); }
+.about-photo { margin: 0; width: min(68vw, 380px); }
 .about-photo img { width: 100%; height: auto; filter: grayscale(1) contrast(1.05); }
 .about-body p { margin: 0 0 1.1em; max-width: 58ch; font-size: clamp(1.05rem, 1.3vw, 1.25rem); line-height: 1.5; text-wrap: pretty; }
 .about-body p:last-child { margin-bottom: 0; }
@@ -564,8 +564,8 @@ html { scrollbar-color: var(--ink) var(--paper); }
 @media (min-width: 900px) {
   .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(2rem, 5vw, 4.5rem); align-items: end; }
   .about-title { grid-column: 1 / 13; }
-  .about-photo { grid-column: 1 / 5; width: 100%; max-width: 380px; }
-  .about-body { grid-column: 5 / 12; padding-bottom: 0; }
+  .about-photo { grid-column: 8 / 13; grid-row: 2; width: 100%; max-width: 560px; justify-self: end; }
+  .about-body { grid-column: 1 / 7; grid-row: 2; padding-bottom: 0; }
 }
 
 /* 404 */
@@ -644,8 +644,8 @@ html { scrollbar-color: var(--ink) var(--paper); }
   .nav a { display: none; }
   .hero { align-items: flex-end; }
   .hero-copy { width: 100%; }
-  .hero { padding-bottom: 8rem; margin-bottom: 52vw; }
-  .hero-deck { width: 150vw; right: -30vw; top: calc(100dvh - 6.5rem); }
+  .hero { padding-bottom: 11rem; margin-bottom: 56vw; }
+  .hero-deck { width: 160vw; right: -34vw; top: calc(100dvh - 9rem); }
   .hero-big { font-size: clamp(3.6rem, 20.5vw, 9rem); }
   .hero-name { font-size: clamp(1.7rem, 9vw, 3.4rem); }
   .hero-lede { max-width: 26ch; }
