@@ -157,8 +157,6 @@ html { scrollbar-color: var(--ink) var(--paper); }
 /* ---------- hero ---------- */
 
 .hero {
-  --px: 0;
-  --py: 0;
   position: relative;
   min-height: 100dvh;
   overflow-x: clip;                  /* the decks hang below the fold, so no vertical clip */
@@ -177,7 +175,7 @@ html { scrollbar-color: var(--ink) var(--paper); }
   max-width: none;
   mix-blend-mode: multiply;
   pointer-events: none;
-  transform: translate3d(calc(var(--px) * 18px), calc(var(--py) * 12px), 0) rotate(-9deg);
+  transform: rotate(-9deg);
 }
 
 .hero.is-scratch { cursor: grab; }

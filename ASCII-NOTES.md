@@ -40,7 +40,7 @@ Common pattern in every piece: pick `cols` from the element width, derive `rows 
 
 ### Deck (`ascii-deck.js`, hero)
 - Layout note: the portrait no longer overlays the decks; it lives in the About section (right below the hero). The decks are tilted (`rotate(-9deg)`) and sit low (`top: 66dvh`) so they hang below the fold to invite scrolling; `.hero` uses `overflow-x: clip` plus a bottom margin so the rest of the decks scroll into view. Because of the tilt, pointer hit-testing in `onMove` first undoes the element's rotation (read from its computed transform) before mapping to source px.
-- Markup: `.hero-deck[data-ascii-deck][data-src]` with `canvas.deck-static` + `canvas.deck-live`. Replaced the old `dj-set.svg` (now unused). Keeps the hero's pointer parallax and `ascii-in` intro via the existing CSS.
+- Markup: `.hero-deck[data-ascii-deck][data-src]` with `canvas.deck-static` + `canvas.deck-live`. Replaced the old `dj-set.svg` (now unused). Keeps the `ascii-in` intro via the existing CSS. The hero pointer parallax (floating on hover) was removed on request.
 - Source crop `{x:188,y:120,w:524,h:232}` of the 900x471 `download.webp`. Jog wheels measured at (274.4, 279.05) and (626.4, 279.05), radius 56.
 - Each deck is a small physics model: `ang`, `vel`, `hover`. Normal speed is 33.33 rpm (`W0`). Platter cells are re-sampled from the photo rotated by `ang`.
 - **Waveform** on each screen is procedural, not sampled (the real strip is only about 13 px tall): scrolls past a fixed playhead, position = `ang * PX_PER_RAD`, so it follows the platter. 174 bpm kick/hat amplitude function (`amp`).
@@ -79,7 +79,7 @@ No segmentation libraries were available (only numpy, Pillow, torch). The cutout
 - Source photos were often low-res (the deck art is only about 520 px wide); do not expect fine detail.
 - Cells are not square: always size the grid with `CELL_ASPECT` and map non-uniformly (`setTransform(sx, 0, 0, sy, ...)`) so shapes keep their proportions.
 - Dark photos need a gamma and stretch or they go grey; light-on-dark art (the figure) reads better with `invert`.
-- Pointer handling for the deck uses a window-level `pointermove` plus `getBoundingClientRect()` because the hero art has `pointer-events: none` and a parallax transform.
+- Pointer handling for the deck uses a window-level `pointermove` plus `getBoundingClientRect()` because the hero art has `pointer-events: none` and is tilted.
 - Everything respects `prefers-reduced-motion`, pauses when off-screen, and has an `aria-hidden` wrapper with a `<noscript>` plain-image fallback.
 - Projects pages share `css/styles.css` and `js/main.js` (NL/EN toggle, scroll-reveal). `main.js` is untouched by this work.
 

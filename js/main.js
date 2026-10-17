@@ -1,4 +1,4 @@
-/* Berend Joosen portfolio: language toggle + hero pointer parallax. */
+/* Berend Joosen portfolio: language toggle, scroll reveal, hero intro. */
 (() => {
   "use strict";
 
@@ -149,32 +149,4 @@
 
   /* stagger index for the intro letters */
   document.querySelectorAll(".hero-big .ch").forEach((el, i) => el.style.setProperty("--i", i));
-
-  /* hero parallax: pointer only, transform via CSS vars, eased in rAF */
-  const hero = document.querySelector(".hero");
-  const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-  const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-  if (hero && fine.matches && !calm.matches) {
-    let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
-
-    const tick = () => {
-      cx += (tx - cx) * 0.08;
-      cy += (ty - cy) * 0.08;
-      hero.style.setProperty("--px", cx.toFixed(3));
-      hero.style.setProperty("--py", cy.toFixed(3));
-      raf = Math.abs(tx - cx) + Math.abs(ty - cy) > 0.002 ? requestAnimationFrame(tick) : 0;
-    };
-
-    hero.addEventListener("pointermove", (e) => {
-      const r = hero.getBoundingClientRect();
-      tx = (e.clientX - r.left) / r.width - 0.5;
-      ty = (e.clientY - r.top) / r.height - 0.5;
-      if (!raf) raf = requestAnimationFrame(tick);
-    });
-    hero.addEventListener("pointerleave", () => {
-      tx = ty = 0;
-      if (!raf) raf = requestAnimationFrame(tick);
-    });
-  }
 })();
