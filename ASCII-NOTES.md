@@ -36,6 +36,7 @@ Common pattern in every piece: pick `cols` from the element width, derive `rows 
 ## The pieces
 
 ### Deck (`ascii-deck.js`, hero)
+- Layout note: the portrait no longer overlays the decks; it lives in the About section (right below the hero), and the decks sit fully visible at the top right of the hero.
 - Markup: `.hero-deck[data-ascii-deck][data-src]` with `canvas.deck-static` + `canvas.deck-live`. Replaced the old `dj-set.svg` (now unused). Keeps the hero's pointer parallax and `ascii-in` intro via the existing CSS.
 - Source crop `{x:188,y:120,w:524,h:232}` of the 900x471 `download.webp`. Jog wheels measured at (274.4, 279.05) and (626.4, 279.05), radius 56.
 - Each deck is a small physics model: `ang`, `vel`, `hover`. Normal speed is 33.33 rpm (`W0`). Platter cells are re-sampled from the photo rotated by `ang`.

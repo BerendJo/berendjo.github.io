@@ -8,7 +8,6 @@
   <meta name="theme-color" content="#fff4f4">
   <link rel="preload" href="assets/fonts/helvetica-neue-heavy.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/helvetica-neue-roman.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/img/portrait.webp" as="image" type="image/webp">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Berend Joosen">
@@ -28,8 +27,8 @@
   <header class="site-header">
     <a class="brand" href="#top" aria-label="Berend Joosen, naar boven" data-i18n-aria="brandAria">Berend Joosen</a>
     <nav class="nav" aria-label="Hoofdmenu" data-i18n-aria="navAria">
-      <a href="#werk" data-i18n="navWork">Werk</a>
       <a href="#over" data-i18n="navAbout">Over</a>
+      <a href="#werk" data-i18n="navWork">Werk</a>
       <a href="#contact" data-i18n="navContact">Contact</a>
       <div class="lang" role="group" aria-label="Taal" data-i18n-aria="langAria">
         <button type="button" data-lang="nl" aria-pressed="true">NL</button>
@@ -45,7 +44,6 @@
         <canvas class="deck-live"></canvas>
         <noscript><img src="assets/img/download.webp" alt="" width="900" height="471"></noscript>
       </div>
-      <img class="hero-portrait" src="assets/img/portrait.webp" alt="Zwart-wit portret van Berend Joosen" data-i18n-alt="portraitAlt" width="1126" height="1400" fetchpriority="high">
 
       <div class="hero-copy">
         <p class="hero-kicker" data-i18n="kicker">graphic design 2026</p>
@@ -55,6 +53,21 @@
         </h1>
         <p class="hero-lede" data-i18n="lede">Graphic designer uit Breda. Albumcovers, merkidentiteit, events en web.</p>
         <a class="btn" href="#werk" data-i18n="cta">Bekijk werk</a>
+      </div>
+    </section>
+
+    <section class="about" id="over" aria-labelledby="about-title">
+      <div class="about-grid">
+        <h2 id="about-title" class="about-title" data-i18n="aboutTitle">Over mij</h2>
+        <figure class="about-photo reveal">
+          <img src="assets/img/portrait.webp" alt="Zwart-wit portret van Berend Joosen" data-i18n-alt="portraitAlt" width="1126" height="1400" loading="lazy" decoding="async">
+        </figure>
+        <div class="about-body reveal">
+          <p class="about-lead" data-i18n="aboutLead">Ik ben een 24-jarige graphic designer uit Breda, gedreven door een sterke creatieve passie.</p>
+          <p data-i18n="aboutP1">Van het bouwen met LEGO tot schilderen: ik ben sinds klein kind al aangetrokken geweest tot hobby's en projecten waarin ik volledig kon opgaan in het creatieve proces. In de loop der jaren heeft diezelfde passie zich ontwikkeld tot een liefde voor foto- en videobewerking, grafisch ontwerp en, meer recentelijk, muziekproductie en dj'en.</p>
+          <p data-i18n="aboutP2">Creativiteit en out-of-the-box denken vormt de kern van alles wat ik doe: geef me iets om mijn creativiteit in te stoppen en ik breng het tot leven.</p>
+          <p class="about-bejo" data-i18n="aboutBejo">Als dj en producer draai en maak ik muziek onder de naam BEJO.</p>
+        </div>
       </div>
     </section>
 
@@ -135,18 +148,6 @@
           <noscript><img src="assets/img/funktionone.png" alt="" width="1200" height="1200"></noscript>
         </div>
 
-      </div>
-    </section>
-
-    <section class="about" id="over" aria-labelledby="about-title">
-      <div class="about-grid">
-        <h2 id="about-title" class="about-title" data-i18n="aboutTitle">Over mij</h2>
-        <div class="about-body">
-          <p class="about-lead" data-i18n="aboutLead">Ik ben een 24-jarige graphic designer uit Breda, gedreven door een sterke creatieve passie.</p>
-          <p data-i18n="aboutP1">Van het bouwen met LEGO tot schilderen: ik ben sinds klein kind al aangetrokken geweest tot hobby's en projecten waarin ik volledig kon opgaan in het creatieve proces. In de loop der jaren heeft diezelfde passie zich ontwikkeld tot een liefde voor foto- en videobewerking, grafisch ontwerp en, meer recentelijk, muziekproductie en dj'en.</p>
-          <p data-i18n="aboutP2">Creativiteit en out-of-the-box denken vormt de kern van alles wat ik doe: geef me iets om mijn creativiteit in te stoppen en ik breng het tot leven.</p>
-          <p class="about-bejo" data-i18n="aboutBejo">Als dj en producer draai en maak ik muziek onder de naam BEJO.</p>
-        </div>
       </div>
     </section>
 
