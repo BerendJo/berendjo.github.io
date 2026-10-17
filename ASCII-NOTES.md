@@ -39,7 +39,7 @@ Common pattern in every piece: pick `cols` from the element width, derive `rows 
 ## The pieces
 
 ### Deck (`ascii-deck.js`, hero)
-- Phone hero (<=760px): the copy sits at the top and the tilted decks follow in the normal flow (`order: 2`, 110vw wide) instead of hanging from the fold; About peeks in below.
+- Phone hero (<=760px): the copy sits at the top and the tilted decks follow in the normal flow (`order: 2`, 130vw wide, pushed right so about 3/4 shows and the rest runs off the right edge) instead of hanging from the fold; About peeks in below.
 - Layout note: the portrait no longer overlays the decks; it lives in the About section (right below the hero). The decks are tilted (`rotate(-9deg)`) and sit low (`top: 66dvh`) so they hang below the fold to invite scrolling; `.hero` uses `overflow-x: clip` plus a bottom margin so the rest of the decks scroll into view. Because of the tilt, pointer hit-testing in `onMove` first undoes the element's rotation (read from its computed transform) before mapping to source px.
 - Markup: `.hero-deck[data-ascii-deck][data-src]` with `canvas.deck-static` + `canvas.deck-live`. Replaced the old `dj-set.svg` (now unused). Keeps the `ascii-in` intro via the existing CSS. The hero pointer parallax (floating on hover) was removed on request.
 - Source crop `{x:188,y:120,w:524,h:232}` of the 900x471 `download.webp`. Jog wheels measured at (274.4, 279.05) and (626.4, 279.05), radius 56.
