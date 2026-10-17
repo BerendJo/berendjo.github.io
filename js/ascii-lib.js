@@ -53,5 +53,27 @@ window.AsciiLib = (() => {
   /* cols for an element this wide (css px): about 3.7px per cell */
   const colsFor = (cssW, min = 110, max = 260) => Math.max(min, Math.min(max, Math.round(cssW / 3.7)));
 
-  return { INK, RAMP, DARK, CELL_ASPECT, make, toGlyphs, glyphsFromData, buildAtlas, colsFor };
+  /* chunky ASCII music notes (eighth, quarter, beamed pair) as glyph-index grids; 0 = blank */
+  const NOTE_SPRITES = [
+    [" ##@=",
+     " #  *",
+     " #",
+     "@@#",
+     "@@"],
+    ["  #",
+     "  #",
+     "  #",
+     "@@#",
+     "@@"],
+    [" #@@@@#",
+     " #    #",
+     " #    #",
+     "@@#  @@#",
+     "@@   @@"]
+  ].map((rows) => {
+    const w = Math.max(...rows.map((r) => r.length));
+    return { w, h: rows.length, rows: rows.map((r) => [...r.padEnd(w)].map((ch) => RAMP.indexOf(ch))) };
+  });
+
+  return { INK, RAMP, DARK, CELL_ASPECT, NOTE_SPRITES, make, toGlyphs, glyphsFromData, buildAtlas, colsFor };
 })();

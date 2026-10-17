@@ -16,27 +16,8 @@
   const BEAT = 60 / 174;
   const PUMP = 0.075;                                        // horn bulge at full pulse
 
-  /* chunky ASCII notes, drawn 2x2 cells per sprite cell */
-  const SPRITES = [
-    [" ##@=",
-     " #  *",
-     " #",
-     "@@#",
-     "@@"],
-    ["  #",
-     "  #",
-     "  #",
-     "@@#",
-     "@@"],
-    [" #@@@@#",
-     " #    #",
-     " #    #",
-     "@@#  @@#",
-     "@@   @@"]
-  ].map((rows) => {
-    const w = Math.max(...rows.map((r) => r.length));
-    return { w, h: rows.length, rows: rows.map((r) => [...r.padEnd(w)].map((ch) => RAMP.indexOf(ch))) };
-  });
+  /* chunky ASCII notes (shared sprites), drawn 2x2 cells per sprite cell */
+  const SPRITES = window.AsciiLib.NOTE_SPRITES;
   const SCALE = 2;
 
   const calm = window.matchMedia("(prefers-reduced-motion: reduce)");

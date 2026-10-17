@@ -16,6 +16,7 @@ Berend supplied photos and wanted them on the site as **live ASCII art**: real g
 | `js/ascii-cup.js` | `projects/douwe-egberts.html`: coffee cup with rising steam. |
 | `js/ascii-lock.js` | `projects/edufort.html`: padlock that unlocks and locks with scroll position. |
 | `js/ascii-figure.js` | Every project page, contact section: static figure lying in the bottom-right corner. |
+| `js/ascii-rain.js` | Easter egg on every page: typing `bejo` rains ASCII notes down the viewport (keyboard only, so not on phones; skipped with reduced motion). |
 | `assets/img/` | Sources: `download.webp` (decks), `funktionone.png`, `cup.webp`, `lock.png`, `fall.webp` (cutout of Berend's photo `ik.jpeg`). `ik.jpeg` and Berend's own pre-rendered `ascii-*.webp` / `ascii-art (n).png` references were removed from the tree to keep the repo light; they are still in git history (commit `f612206`). Also `og.jpg` (link preview, a screenshot of the deck) and `assets/favicon.svg` (pixel B). |
 | `css/styles.css` | Sections: `.hero-deck`, `.speaker`, `.cup`, `.lock`, `.p-contact*`, `.corner-figure`. |
 
@@ -28,6 +29,7 @@ Script order on every page that uses them: `ascii-lib.js` first, then the piece 
 - `glyphsFromData(px, w, h, out, gamma = 0.65, invert = false)` and `toGlyphs(ctx, ...)`: RGBA pixels (already scaled to one pixel per cell) to glyph indices, 0 = blank (alpha < 0.08 is blank). Default maps **dark pixels to dense glyphs**; higher `gamma` makes the result denser. `invert = true` maps **bright pixels to dense glyphs** (used for the figure, matching Berend's reference render).
 - `buildAtlas(cw, ch, chars = RAMP)`: one canvas strip with a pre-rendered glyph per character; drawing a cell is a single `drawImage`. Steam and speed lines pass their own char sets.
 - `colsFor(cssW, min, max)`: columns for an element width (about `cssW / 3.7`).
+- `NOTE_SPRITES`: the three chunky music-note sprites as glyph-index grids, shared by the speaker and the rain easter egg.
 
 Common pattern in every piece: pick `cols` from the element width, derive `rows = H / (cw * CELL_ASPECT)`, draw the source into a `cols x rows` offscreen canvas, convert to glyphs, blit via the atlas. A **static layer** (drawn once) plus a **live layer** (redrawn per frame) keeps animation cheap. Pieces "claim" cells (owner map) for the live layer by cell centre so the two layers never double-draw.
 
@@ -53,6 +55,9 @@ Common pattern in every piece: pick `cols` from the element width, derive `rows 
 - Markup: `.lock[data-ascii-lock]` in a `.p-block` (`--c: 8 / 13`), same placement trick as the cup.
 - Body and keyhole drawn once. The shackle is a separate sprite (legs extended downward so it stays attached when lifted), lifted `LIFT` px and foreshortened with `cos(turn)` about the right leg (max `SWING` of 78 degrees). Only rows above the body are live.
 - Scroll-scrubbed, not time-based: `openness()` is 0 as the lock enters, 1 around mid-screen, 0 as it leaves (`smooth((t-0.1)/0.25) * (1 - smooth((t-0.5)/0.25))`). Eased toward the target each frame. Reduced motion: still, closed.
+
+### Rain easter egg (`ascii-rain.js`)
+- Global `keydown` listener keeps the last 4 letters; `bejo` (not while typing in a field, no modifiers) opens a fixed full-viewport canvas (`z-index: 90`, `pointer-events: none`) and spawns about 30 notes/s for 3.8 s. Big notes fall fast in front with a paper-coloured outline (so they read over dark images); small ones are slower and drawn with lighter glyphs. Canvas removes itself when the last note has fallen. Typing it again extends the rain. A `console.log` hint is printed.
 
 ### Figure (`ascii-figure.js`, all five project pages)
 - Markup: inside `.p-contact` > `.p-contact-stage`: `.corner-figure[data-ascii-figure][data-src="../assets/img/fall.webp"]` plus `.p-contact-copy` (the "Interested?" heading and email).

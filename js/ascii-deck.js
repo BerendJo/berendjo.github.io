@@ -245,7 +245,7 @@
   }
 
   function play() {
-    if (running || calm.matches || !visible || document.hidden) return;
+    if (running || calm.matches || !visible || document.hidden || !grid) return;
     running = true;
     raf = requestAnimationFrame(frame);
   }
@@ -278,7 +278,7 @@
   let resizeTimer = 0;
   new ResizeObserver(() => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { if (crop) render(); }, 120);
+    resizeTimer = setTimeout(() => { if (crop) { render(); play(); } }, 120);
   }).observe(host);
 
   window.addEventListener("pointermove", onMove, { passive: true });
