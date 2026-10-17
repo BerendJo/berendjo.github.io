@@ -9,7 +9,16 @@
   <link rel="preload" href="assets/fonts/helvetica-neue-heavy.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/helvetica-neue-roman.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/img/portrait.webp" as="image" type="image/webp">
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Berend Joosen">
+  <meta property="og:title" content="Berend Joosen | Graphic design portfolio 2026">
+  <meta property="og:description" content="Portfolio van Berend Joosen, graphic designer uit Breda. Albumcovers, merkidentiteit, evenementen en web.">
+  <meta property="og:url" content="https://berendjo.github.io/">
+  <meta property="og:image" content="https://berendjo.github.io/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -129,12 +138,35 @@
       </div>
     </section>
 
-    <!-- Next sections (over, contact) follow after the overview is approved. -->
+    <section class="about" id="over" aria-labelledby="about-title">
+      <div class="about-grid">
+        <h2 id="about-title" class="about-title" data-i18n="aboutTitle">Over mij</h2>
+        <div class="about-body">
+          <p class="about-lead" data-i18n="aboutLead">Ik ben een 24-jarige graphic designer uit Breda, gedreven door een sterke creatieve passie.</p>
+          <p data-i18n="aboutP1">Van het bouwen met LEGO tot schilderen: ik ben sinds klein kind al aangetrokken geweest tot hobby's en projecten waarin ik volledig kon opgaan in het creatieve proces. In de loop der jaren heeft diezelfde passie zich ontwikkeld tot een liefde voor foto- en videobewerking, grafisch ontwerp en, meer recentelijk, muziekproductie en dj'en.</p>
+          <p data-i18n="aboutP2">Creativiteit en out-of-the-box denken vormt de kern van alles wat ik doe: geef me iets om mijn creativiteit in te stoppen en ik breng het tot leven.</p>
+          <p class="about-bejo" data-i18n="aboutBejo">Als dj en producer draai en maak ik muziek onder de naam BEJO.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-contact" id="contact" aria-labelledby="contact-h">
+      <div class="p-contact-stage">
+        <div class="corner-figure" data-ascii-figure data-src="assets/img/fall.webp" aria-hidden="true"><canvas></canvas></div>
+        <div class="p-contact-copy">
+          <h2 id="contact-h" class="p-contact-title" data-i18n="contactTitle">Interesse?</h2>
+          <a class="p-contact-mail" href="mailto:berendjoosen@gmail.com">berendjoosen@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next section (over) follows after the overview is approved. -->
   </main>
 
   <script src="js/main.js"></script>
   <script src="js/ascii-lib.js"></script>
   <script src="js/ascii-deck.js"></script>
   <script src="js/ascii-speaker.js"></script>
+  <script src="js/ascii-figure.js"></script>
 </body>
 </html>
