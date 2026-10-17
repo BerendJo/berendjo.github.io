@@ -642,10 +642,10 @@ html { scrollbar-color: var(--ink) var(--paper); }
 
 @media (max-width: 760px) {
   .nav a { display: none; }
-  .hero { align-items: flex-end; }
-  .hero-copy { width: 100%; }
-  .hero { padding-bottom: 11rem; margin-bottom: 56vw; }
-  .hero-deck { width: 160vw; right: -34vw; top: calc(100dvh - 9rem); }
+  /* phone hero: copy at the top, the tilted decks right under it, About peeking in below */
+  .hero { flex-direction: column; align-items: stretch; justify-content: flex-start; min-height: 0; padding-bottom: 1rem; margin-bottom: 3.5rem; }
+  .hero-copy { order: 1; width: 100%; }
+  .hero-deck { order: 2; position: relative; top: auto; right: auto; align-self: flex-start; width: 110vw; margin: clamp(2rem, 8vw, 3rem) 0 0 -5vw; }
   .hero-big { font-size: clamp(3.6rem, 20.5vw, 9rem); }
   .hero-name { font-size: clamp(1.7rem, 9vw, 3.4rem); }
   .hero-lede { max-width: 26ch; }
