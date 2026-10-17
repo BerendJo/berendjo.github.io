@@ -563,8 +563,8 @@ html { scrollbar-color: var(--ink) var(--paper); }
 .about-body .about-bejo { font-weight: 700; letter-spacing: var(--bold-track); }
 @media (min-width: 900px) {
   .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(1rem, 2vw, 1.75rem); align-items: end; }
-  .about-title { grid-column: 1 / 13; }
-  .about-photo { grid-column: 8 / 13; grid-row: 2; width: 100%; max-width: 560px; justify-self: end; }
+  .about-title { grid-column: 1 / 8; }
+  .about-photo { grid-column: 8 / 13; grid-row: 1 / span 2; align-self: start; width: 100%; max-width: 560px; justify-self: end; }   /* up beside the title */
   .about-body { grid-column: 1 / 7; grid-row: 2; align-self: start; }   /* text hangs right under the title */
 }
 
