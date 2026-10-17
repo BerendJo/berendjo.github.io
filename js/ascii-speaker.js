@@ -14,8 +14,8 @@
   const HORN = { x: 260, y: 290, rx: 225, ry: 215 };        // pumping ellipse, crop px
   const BLEED = { l: 0.2, t: 0.2 };                          // notes canvas overhang, share of speaker w / h (matches css)
   const BEAT = 60 / 174;
-  const PUMP = 0.07;                                         // horn bulge at full pulse
-  const FLASH = 0.9;                                         // glyph levels the horn darkens by at full pulse
+  const PUMP = 0.09;                                         // horn bulge at full pulse
+  const FLASH = 1.6;                                         // glyph levels the horn darkens by at full pulse
 
   /* chunky ASCII notes (shared sprites), drawn 2x2 cells per sprite cell */
   const SPRITES = window.AsciiLib.NOTE_SPRITES;
@@ -118,7 +118,10 @@
           if (sc < 0 || sc >= cols || sr < 0 || sr >= rows) { sc = c; sr = r; }
         }
         let gi = base[sr * cols + sc];
-        if (gi && p > 0.05) gi = Math.min(RAMP.length - 1, gi + Math.round(p * FLASH));   // thump: horn flashes darker on the beat
+        if (gi && p > 0.05) {                                // thump: horn flashes darker on the beat
+          const lift = p * FLASH, n = Math.floor(lift);
+          gi = Math.min(RAMP.length - 1, gi + n + (hash(r * cols + c) < lift - n ? 1 : 0));   // dithered, so weak pulses still show
+        }
         glyph(lctx, gi, c, r);
       }
     }
@@ -208,10 +211,10 @@
       beatIn += BEAT;
       beat++;
       if (speed > 40) {                                         // scrolling: harder kick, more notes
-        pump = 1;
+        pump = 1.2;
         emit(speed > 2400 ? 3 : speed > 1100 ? 2 : 1);
       } else {                                                  // idle: a softer pump every beat, a note every other beat
-        pump = Math.max(pump, 0.55);
+        pump = Math.max(pump, 0.6);
         if (beat % 2 === 0) emit(1);
       }
     }
