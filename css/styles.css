@@ -161,7 +161,8 @@ html { scrollbar-color: var(--ink) var(--paper); }
   --py: 0;
   position: relative;
   min-height: 100dvh;
-  overflow: clip;
+  overflow-x: clip;                  /* the decks hang below the fold, so no vertical clip */
+  margin-bottom: clamp(9rem, 20vw, 20rem);   /* room for the part of the decks that scrolls into view */
   display: flex;
   align-items: flex-end;
   padding: calc(var(--nav-h) + 1rem) var(--gutter) clamp(1.5rem, 4vh, 3rem);
@@ -169,14 +170,14 @@ html { scrollbar-color: var(--ink) var(--paper); }
 
 .hero-deck {
   position: absolute;
-  top: calc(var(--nav-h) + 1.5vh);
-  right: var(--gutter);
-  width: 64vw;
+  top: 66dvh;
+  right: -6vw;
+  width: 66vw;
   aspect-ratio: 524 / 232;
   max-width: none;
   mix-blend-mode: multiply;
   pointer-events: none;
-  transform: translate3d(calc(var(--px) * 18px), calc(var(--py) * 12px), 0);
+  transform: translate3d(calc(var(--px) * 18px), calc(var(--py) * 12px), 0) rotate(-9deg);
 }
 
 .hero.is-scratch { cursor: grab; }
@@ -554,17 +555,17 @@ html { scrollbar-color: var(--ink) var(--paper); }
 .about { padding: clamp(3rem, 8vw, 7rem) var(--gutter) clamp(4rem, 9vw, 8rem); scroll-margin-top: var(--nav-h); }
 .about-grid { max-width: 1600px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); border-top: 1.5px solid var(--ink); padding-top: clamp(1.5rem, 3vw, 2.5rem); }
 .about-title { margin: 0; font-weight: 800; font-size: clamp(3.5rem, 11vw, 12rem); line-height: 0.85; letter-spacing: var(--display-track); }
-.about-photo { margin: 0; width: min(78vw, 420px); }
+.about-photo { margin: 0; width: min(60vw, 320px); }
 .about-photo img { width: 100%; height: auto; filter: grayscale(1) contrast(1.05); }
 .about-body p { margin: 0 0 1.1em; max-width: 58ch; font-size: clamp(1.05rem, 1.3vw, 1.25rem); line-height: 1.5; text-wrap: pretty; }
 .about-body p:last-child { margin-bottom: 0; }
 .about-body .about-lead { font-weight: 700; font-size: clamp(1.35rem, 2.1vw, 2rem); letter-spacing: var(--bold-track); line-height: 1.15; max-width: 30ch; }
 .about-body .about-bejo { font-weight: 700; letter-spacing: var(--bold-track); }
 @media (min-width: 900px) {
-  .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(2rem, 5vw, 4.5rem); }
+  .about-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: clamp(2rem, 5vw, 4.5rem); align-items: end; }
   .about-title { grid-column: 1 / 13; }
-  .about-photo { grid-column: 1 / 6; width: 100%; }
-  .about-body { grid-column: 7 / 13; align-self: end; padding-bottom: 0.5rem; }
+  .about-photo { grid-column: 1 / 5; width: 100%; max-width: 380px; }
+  .about-body { grid-column: 5 / 12; padding-bottom: 0; }
 }
 
 /* 404 */
@@ -643,7 +644,8 @@ html { scrollbar-color: var(--ink) var(--paper); }
   .nav a { display: none; }
   .hero { align-items: flex-end; }
   .hero-copy { width: 100%; }
-  .hero-deck { width: calc(100% - 2 * var(--gutter)); right: var(--gutter); top: calc(var(--nav-h) + 2dvh); }
+  .hero { padding-bottom: 8rem; margin-bottom: 52vw; }
+  .hero-deck { width: 150vw; right: -30vw; top: calc(100dvh - 6.5rem); }
   .hero-big { font-size: clamp(3.6rem, 20.5vw, 9rem); }
   .hero-name { font-size: clamp(1.7rem, 9vw, 3.4rem); }
   .hero-lede { max-width: 26ch; }

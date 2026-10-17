@@ -206,8 +206,14 @@
     if (!grid || !visible || calm.matches || e.pointerType === "touch") return;
     const rect = host.getBoundingClientRect();
     if (!rect.width) return;
-    const px = (e.clientX - rect.left) / rect.width * CROP.w;
-    const py = (e.clientY - rect.top) / rect.height * CROP.h;
+    // the deck is tilted: undo its rotation around its centre to get local coordinates
+    const t = getComputedStyle(host).transform;
+    const ang = t && t !== "none" ? Math.atan2(new DOMMatrixReadOnly(t).b, new DOMMatrixReadOnly(t).a) : 0;
+    const dx0 = e.clientX - (rect.left + rect.width / 2), dy0 = e.clientY - (rect.top + rect.height / 2);
+    const cs = Math.cos(-ang), sn = Math.sin(-ang);
+    const w = host.clientWidth, h = host.clientHeight;
+    const px = ((dx0 * cs - dy0 * sn) + w / 2) / w * CROP.w;
+    const py = ((dx0 * sn + dy0 * cs) + h / 2) / h * CROP.h;
     let over = false;
     WHEELS.forEach((w, k) => {
       const d = decks[k];
