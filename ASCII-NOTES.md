@@ -16,7 +16,9 @@ Berend supplied photos and wanted them on the site as **live ASCII art**: real g
 | `js/ascii-cup.js` | `projects/douwe-egberts.html`: coffee cup with rising steam. |
 | `js/ascii-lock.js` | `projects/edufort.html`: padlock that unlocks and locks with scroll position. |
 | `js/ascii-figure.js` | Every project page, contact section: static figure lying in the bottom-right corner. |
-| `js/ascii-portrait.js` | Home About section: hovering the headshot slowly turns the photo into ASCII (spreads from where the pointer entered, reverses on leave; tap toggles on touch; instant with reduced motion). An overlay canvas knocks out photo cells with paper-coloured rects and draws glyphs; dark = dense (the face reads better than `invert`). |
+| `js/ascii-morph.js` | Shared photo-to-ASCII hover transition: `AsciiLib.morph({hover, host, measure, paint, gamma, invert, cutout, touchToggle})`. Overlay canvas knocks out picture cells with paper-coloured rects and draws glyphs, spreading from where the pointer entered (2.4 s in, 1.5 s out; instant with reduced motion). Layout is lazy (first hover). |
+| `js/ascii-portrait.js` | Home About headshot, via `morph` (`cutout: true`, dark = dense, `touchToggle`). |
+| `js/ascii-cards.js` | Home work cards, via `morph`: recomposes each card's `<img>`s (object-fit, padding, opacity, background colour) into one picture, `gamma: 1.5` because photos are bright. Mouse/pen only. |
 | `js/ascii-rain.js` | Easter egg on every page: typing `bejo` rains ASCII notes down the viewport (keyboard only, so not on phones; skipped with reduced motion). |
 | `assets/img/` | Sources: `download.webp` (decks), `funktionone.png`, `cup.webp`, `lock.png`, `fall.webp` (cutout of Berend's photo `ik.jpeg`). `ik.jpeg` and Berend's own pre-rendered `ascii-*.webp` / `ascii-art (n).png` references were removed from the tree to keep the repo light; they are still in git history (commit `f612206`). Also `og.jpg` (link preview, a screenshot of the deck) and `assets/favicon.svg` (pixel B). |
 | `css/styles.css` | Sections: `.hero-deck`, `.speaker`, `.cup`, `.lock`, `.p-contact*`, `.corner-figure`. |
