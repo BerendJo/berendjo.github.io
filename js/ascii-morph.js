@@ -16,9 +16,16 @@
   if (!lib) return;
   const { make, glyphsFromData, buildAtlas, colsFor, CELL_ASPECT } = lib;
 
-  const IN = 2.4, OUT = 1.5;                 // seconds for the full change, there and back
+  const IN = 0.5, OUT = 0.2;                 // seconds for the full change, there and back (out is short so a card you leave
+                                             // finishes quickly while the next one starts)
   const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const paper = "#fff4f4";   // drawn light; the canvas filter flips it with the theme
+  const root = document.documentElement;
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const isDark = () => (root.dataset.theme ? root.dataset.theme === "dark" : darkQuery.matches);
+  /* the first layout of a picture (sampling it, building glyphs) costs up to ~100ms, so every morph gets
+     prepared in idle time, one at a time, long before anyone hovers it */
+  const whenIdle = lib.whenIdle;
+
   const hash = (n) => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
 
   lib.morph = function morph(opts) {
@@ -34,7 +41,7 @@
     }
     const ctx = canvas.getContext("2d");
 
-    let grid, atlas, glyphs, alpha, noise, thr;
+    let grid, atlas, glyphs, alpha, noise, thr, live, full, mask, mctx, maskData;
     let t = 0, target = 0, raf = 0, prev = 0, drawn = -1;
     let origin = { x: 0.5, y: 0.4 };         // where the change starts, share of the picture
 
@@ -48,7 +55,9 @@
       const cw = W / cols, ch = H / rows;
       canvas.width = W; canvas.height = H;
       grid = { cols, rows, cw, ch, W, H, gw: Math.ceil(cw), cssW: m.cssW, cssH: m.cssH };
-      atlas = buildAtlas(cw, ch);
+      const dark = isDark();                                    // colours are drawn in the theme, no canvas filter needed
+      const paper = dark ? "#120f10" : "#fff4f4", ink = dark ? "#fff4f4" : "#120f10";
+      atlas = buildAtlas(cw, ch, undefined, ink);
 
       const small = make(cols, rows);
       const g = small.getContext("2d", { willReadFrequently: true });
@@ -58,7 +67,28 @@
       glyphs = glyphsFromData(px, cols, rows, new Uint8Array(cols * rows), gamma, invert);
       alpha = new Uint8Array(cols * rows);
       noise = new Float32Array(cols * rows);
-      for (let i = 0; i < alpha.length; i++) { alpha[i] = cutout ? px[i * 4 + 3] : 255; noise[i] = hash(i * 0.37); }
+      const cells = [];
+      for (let i = 0; i < alpha.length; i++) {
+        alpha[i] = cutout ? px[i * 4 + 3] : 255; noise[i] = hash(i * 0.37);
+        if (alpha[i] >= 24) cells.push(i);                      // outside the cut-out never changes
+      }
+      live = Uint32Array.from(cells);
+
+      /* the whole ASCII picture is drawn once, here; a hover then only reveals parts of it through a mask
+         (one pixel per cell), so a frame costs a handful of canvas calls however fast the animation runs */
+      full = make(W, H);
+      const fg = full.getContext("2d");
+      fg.fillStyle = paper;                                     // covers the picture under each cell
+      for (const i of live) {
+        const c = i % cols, r = (i / cols) | 0;
+        const x0 = Math.floor(c * cw), x1 = Math.min(W, Math.floor((c + 1) * cw));
+        const y0 = Math.floor(r * ch), y1 = Math.min(H, Math.floor((r + 1) * ch));
+        fg.fillRect(x0, y0, x1 - x0, y1 - y0);
+        if (glyphs[i]) fg.drawImage(atlas, glyphs[i] * grid.gw, 0, grid.gw, atlas.height, c * cw, r * ch, grid.gw, atlas.height);
+      }
+      mask = make(cols, rows);
+      mctx = mask.getContext("2d");
+      maskData = mctx.createImageData(cols, rows);
       setOrigin(origin.x, origin.y);
       drawn = -1;
       draw();
@@ -82,20 +112,21 @@
     function draw() {
       if (!grid || t === drawn) return;
       drawn = t;
-      const { cols, cw, ch, gw } = grid;
-      ctx.clearRect(0, 0, grid.W, grid.H);
+      const { W, H } = grid;
+      ctx.clearRect(0, 0, W, H);
       if (t <= 0) return;
-      for (let i = 0; i < glyphs.length; i++) {
-        if (alpha[i] < 24) continue;                            // outside the cut-out
-        const s = Math.max(0, Math.min(1, (t * 1.35 - thr[i]) * 4));
-        if (s <= 0) continue;
-        const x = (i % cols) * cw, y = ((i / cols) | 0) * ch;
-        ctx.globalAlpha = s;
-        ctx.fillStyle = paper;                                  // covers the picture under this cell
-        ctx.fillRect(x - 0.5, y - 0.5, cw + 1, ch + 1);
-        if (glyphs[i]) ctx.drawImage(atlas, glyphs[i] * gw, 0, gw, atlas.height, x, y, gw, atlas.height);
+      const d = maskData.data, k = t * 1.35;
+      for (let n = 0; n < live.length; n++) {
+        const i = live[n], s = (k - thr[i]) * 4;
+        d[i * 4 + 3] = s <= 0 ? 0 : s >= 1 ? 255 : (s * 255) | 0;
       }
-      ctx.globalAlpha = 1;
+      mctx.putImageData(maskData, 0, 0);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.drawImage(full, 0, 0);
+      ctx.globalCompositeOperation = "destination-in";          // keep only the revealed cells
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(mask, 0, 0, W, H);
+      ctx.globalCompositeOperation = "source-over";
     }
 
     function tick(now) {
@@ -126,12 +157,26 @@
     hover.addEventListener("pointerleave", (e) => { if (e.pointerType !== "touch") go(0); });
     if (touchToggle) hover.addEventListener("pointerup", (e) => { if (e.pointerType === "touch") go(target ? 0 : 1); });
 
+    /* size or theme changed: the prepared picture is stale */
+    function invalidate() {
+      if (!grid) return;
+      grid = null;
+      if (t > 0 || target > 0) layout(); else whenIdle(prep);
+    }
     let timer = 0;
-    new ResizeObserver(() => {
-      clearTimeout(timer);
-      timer = setTimeout(() => { if (!grid) return; grid = null; if (t > 0 || target > 0) layout(); }, 150);
-    }).observe(host);
+    new ResizeObserver(() => { clearTimeout(timer); timer = setTimeout(invalidate, 150); }).observe(host);
+    new MutationObserver(invalidate).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+    darkQuery.addEventListener("change", invalidate);
 
-    return { prepare: layout };
+    /* get the layout done ahead of the first hover; the picture may not be loaded yet, so retry for a while */
+    let tries = 0;
+    function prep() {
+      if (grid || layout()) return;
+      if (++tries < 20) setTimeout(() => whenIdle(prep), 700);
+    }
+    if (document.readyState === "complete") whenIdle(prep);
+    else window.addEventListener("load", () => whenIdle(prep), { once: true });
+
+    return { prepare: () => grid || layout() };
   };
 })();

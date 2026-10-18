@@ -37,10 +37,10 @@ window.AsciiLib = (() => {
     glyphsFromData(ctx.getImageData(0, 0, w, h).data, w, h, out, gamma, invert);
 
   /* one strip with a pre-rendered glyph per character (default: the ramp), so drawing a cell is a drawImage */
-  function buildAtlas(cw, ch, chars = RAMP) {
+  function buildAtlas(cw, ch, chars = RAMP, ink = INK) {
     const atlas = make(Math.ceil(cw) * chars.length, Math.ceil(ch));
     const g = atlas.getContext("2d");
-    g.fillStyle = INK;
+    g.fillStyle = ink;
     g.font = `700 ${ch * 0.92}px Consolas, "SF Mono", Menlo, "Courier New", monospace`;
     g.textAlign = "center";
     g.textBaseline = "middle";
@@ -75,5 +75,21 @@ window.AsciiLib = (() => {
     return { w, h: rows.length, rows: rows.map((r) => [...r.padEnd(w)].map((ch) => RAMP.indexOf(ch))) };
   });
 
-  return { INK, RAMP, DARK, CELL_ASPECT, NOTE_SPRITES, make, toGlyphs, glyphsFromData, buildAtlas, colsFor };
+  /* run jobs one at a time in browser idle time, so preparing several pictures never blocks a frame */
+  const schedule = (f) => ("requestIdleCallback" in window ? requestIdleCallback(f, { timeout: 1500 }) : setTimeout(f, 150));
+  const idleQueue = [];
+  let idleRunning = false;
+  function whenIdle(fn) {
+    idleQueue.push(fn);
+    if (idleRunning) return;
+    idleRunning = true;
+    const run = () => {
+      const job = idleQueue.shift();
+      try { job(); } catch (_) { /* a failed preparation just falls back to doing the work on demand */ }
+      if (idleQueue.length) schedule(run); else idleRunning = false;
+    };
+    schedule(run);
+  }
+
+  return { whenIdle, INK, RAMP, DARK, CELL_ASPECT, NOTE_SPRITES, make, toGlyphs, glyphsFromData, buildAtlas, colsFor };
 })();

@@ -36,7 +36,7 @@
   --media-bg: #120f10;     /* image panels stay dark in both themes */
 
   /* theme switches: grain blend, hero blend and how the ASCII canvases (drawn in ink) are shown */
-  --grain-blend: multiply;
+  --grain-blend: normal;
   --grain-opacity: 0.045;
   --deck-blend: multiply;
   --ascii-filter: none;
@@ -64,7 +64,7 @@
   --rule: rgb(255 244 244 / 0.85);
   --paper-deep: #241c1e;
   --media-bg: #1d1719;
-  --grain-blend: screen;
+  --grain-blend: normal;
   --grain-opacity: 0.03;
   --deck-blend: normal;
   --ascii-filter: invert(1);
@@ -79,7 +79,7 @@
     --rule: rgb(255 244 244 / 0.85);
     --paper-deep: #241c1e;
     --media-bg: #1d1719;
-    --grain-blend: screen;
+    --grain-blend: normal;
     --grain-opacity: 0.03;
     --deck-blend: normal;
     --ascii-filter: invert(1);
@@ -87,9 +87,9 @@
   }
 }
 
-/* the ASCII glyphs are baked in ink on a light paper fill; flip both with the theme */
-.hero-deck canvas, .speaker canvas, .cup canvas, .lock canvas, .corner-figure canvas,
-.about-photo canvas, .tile-media canvas { filter: var(--ascii-filter); }
+/* the ASCII glyphs are baked in ink on a light paper fill; flip both with the theme
+   (the hover morph on the portrait and work cards draws in the theme colours itself, so it needs no filter) */
+.hero-deck canvas, .speaker canvas, .cup canvas, .lock canvas, .corner-figure canvas { filter: var(--ascii-filter); }
 /* no-JS fallbacks are pre-rendered ASCII (assets/img/ascii), drawn in ink like the canvases */
 .hero-deck noscript img, .speaker noscript img, .cup noscript img, .lock noscript img, .corner-figure noscript img { filter: var(--ascii-filter); }
 
@@ -466,8 +466,6 @@ html { scrollbar-color: var(--ink) var(--paper); }
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .tile:hover .tile-media img:not(.mz-bg) { transform: scale(1.035); }
-  .tile:hover .mezz-stage .mz-bg { transform: scale(1.035); }
   .tile:hover .tile-name, .tile:focus-visible .tile-name { background-size: 100% 3px; }
 }
 
