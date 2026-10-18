@@ -32,6 +32,15 @@
   --ink: #120f10;
   --ink-soft: #4d4446;
   --rule: rgb(18 15 16 / 0.85);
+  --paper-deep: #f7e3e3;   /* tinted image panels */
+  --media-bg: #120f10;     /* image panels stay dark in both themes */
+
+  /* theme switches: grain blend, hero blend and how the ASCII canvases (drawn in ink) are shown */
+  --grain-blend: multiply;
+  --grain-opacity: 0.045;
+  --deck-blend: multiply;
+  --ascii-filter: none;
+  color-scheme: light;
 
   /* type */
   --font: "Helvetica Neue Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -45,6 +54,42 @@
   /* motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
+
+/* ---------- dark theme: OS preference unless the visitor picked one ---------- */
+
+:root[data-theme="dark"] {
+  --paper: #120f10;
+  --ink: #fff4f4;
+  --ink-soft: #bfb3b5;
+  --rule: rgb(255 244 244 / 0.85);
+  --paper-deep: #241c1e;
+  --media-bg: #1d1719;
+  --grain-blend: screen;
+  --grain-opacity: 0.03;
+  --deck-blend: normal;
+  --ascii-filter: invert(1);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #120f10;
+    --ink: #fff4f4;
+    --ink-soft: #bfb3b5;
+    --rule: rgb(255 244 244 / 0.85);
+    --paper-deep: #241c1e;
+    --media-bg: #1d1719;
+    --grain-blend: screen;
+    --grain-opacity: 0.03;
+    --deck-blend: normal;
+    --ascii-filter: invert(1);
+    color-scheme: dark;
+  }
+}
+
+/* the ASCII glyphs are baked in ink on a light paper fill; flip both with the theme */
+.hero-deck canvas, .speaker canvas, .cup canvas, .lock canvas, .corner-figure canvas,
+.about-photo canvas, .tile-media canvas { filter: var(--ascii-filter); }
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -69,8 +114,8 @@ body::before {
   z-index: 60;
   pointer-events: none;
   background: url("../assets/img/paper.webp") center / cover no-repeat;
-  mix-blend-mode: multiply;
-  opacity: 0.045;
+  mix-blend-mode: var(--grain-blend);
+  opacity: var(--grain-opacity);
 }
 
 img { display: block; max-width: 100%; height: auto; }
@@ -132,6 +177,20 @@ html { scrollbar-color: var(--ink) var(--paper); }
   transition: background-size 220ms var(--ease-out);
 }
 
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2rem;
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--ease-out);
+}
+.theme-toggle:active { transform: scale(0.97); }
+
 .lang {
   display: inline-flex;
   border: 1.5px solid var(--ink);
@@ -173,7 +232,7 @@ html { scrollbar-color: var(--ink) var(--paper); }
   width: 74vw;
   aspect-ratio: 524 / 232;
   max-width: none;
-  mix-blend-mode: multiply;
+  mix-blend-mode: var(--deck-blend);
   pointer-events: none;
   transform: rotate(-9deg);
 }
@@ -250,7 +309,8 @@ html { scrollbar-color: var(--ink) var(--paper); }
 @media (hover: hover) and (pointer: fine) {
   .nav a:hover { background-size: 100% 1.5px; }
   .btn:hover { background: transparent; color: var(--ink); }
-  .lang button[aria-pressed="false"]:hover { background: rgb(18 15 16 / 0.1); }
+  .theme-toggle:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+  .lang button[aria-pressed="false"]:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
 }
 
 /* ---------- intro motion (only when motion is allowed) ---------- */
@@ -276,8 +336,6 @@ html { scrollbar-color: var(--ink) var(--paper); }
 }
 
 /* ---------- work overview ---------- */
-
-:root { --paper-deep: #f7e3e3; }
 
 .work {
   padding: clamp(5rem, 11vw, 10rem) var(--gutter) clamp(5rem, 10vw, 9rem);
@@ -318,7 +376,7 @@ html { scrollbar-color: var(--ink) var(--paper); }
 .tile-media {
   position: relative;
   overflow: clip;
-  background: var(--ink);
+  background: var(--media-bg);
 }
 .tile-media.tinted { background: var(--paper-deep); }
 .ratio-43 { aspect-ratio: 4 / 3; }
@@ -490,7 +548,7 @@ html { scrollbar-color: var(--ink) var(--paper); }
 }
 
 /* image panels: images are placed per layout so they never depend on intrinsic size */
-.p-panel { position: relative; overflow: clip; aspect-ratio: 16 / 9; background: var(--ink); }
+.p-panel { position: relative; overflow: clip; aspect-ratio: 16 / 9; background: var(--media-bg); }
 .p-panel.tinted { background: var(--paper-deep); }
 .p-panel img { position: absolute; width: auto; max-width: none; height: auto; }
 

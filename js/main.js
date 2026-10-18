@@ -9,6 +9,7 @@
       brandAria: "Berend Joosen, naar boven",
       navAria: "Hoofdmenu",
       langAria: "Taal",
+      themeAria: "Donkere modus",
       navWork: "Werk",
       navAbout: "Over",
       navContact: "Contact",
@@ -54,6 +55,7 @@
       brandAria: "Berend Joosen, back to top",
       navAria: "Main menu",
       langAria: "Language",
+      themeAria: "Dark mode",
       navWork: "Work",
       navAbout: "About",
       navContact: "Contact",
@@ -127,6 +129,26 @@
   }
 
   buttons.forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+  /* theme: stored choice wins, otherwise the OS preference (CSS handles that case on its own) */
+  const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const themeBtn = document.querySelector(".theme-toggle");
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  const isDark = () => (root.dataset.theme ? root.dataset.theme === "dark" : darkQuery.matches);
+  function syncTheme() {
+    if (themeBtn) themeBtn.setAttribute("aria-pressed", String(isDark()));
+    if (themeMeta) themeMeta.content = isDark() ? "#120f10" : "#fff4f4";
+  }
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+      const next = isDark() ? "light" : "dark";
+      root.dataset.theme = next;
+      try { localStorage.setItem("theme", next); } catch (_) { /* private mode */ }
+      syncTheme();
+    });
+  }
+  darkQuery.addEventListener("change", syncTheme);
+  syncTheme();
 
   const saved = store.get();
   const initial = saved || ((navigator.language || "nl").toLowerCase().startsWith("nl") ? "nl" : "en");

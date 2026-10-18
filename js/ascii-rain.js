@@ -11,7 +11,7 @@
   const DURATION = 3800;                       // ms of spawning; the last notes fall out after that
   const CW = 3.7, CH = CW * CELL_ASPECT;       // cell size, css px
   const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const paper = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim() || "#fff4f4";
+  const paper = "#fff4f4";   // drawn light; the canvas filter flips it with the theme
 
   let canvas, ctx, atlas, gw, dpr, vw, vh, raf = 0, prev = 0, endAt = 0, debt = 0;
   const notes = [];
@@ -21,7 +21,7 @@
     vw = window.innerWidth; vh = window.innerHeight;
     canvas = document.createElement("canvas");
     canvas.setAttribute("aria-hidden", "true");
-    canvas.style.cssText = "position:fixed;inset:0;width:100%;height:100%;z-index:90;pointer-events:none";
+    canvas.style.cssText = "position:fixed;inset:0;width:100%;height:100%;z-index:90;pointer-events:none;filter:var(--ascii-filter)";
     canvas.width = Math.round(vw * dpr); canvas.height = Math.round(vh * dpr);
     document.body.appendChild(canvas);
     ctx = canvas.getContext("2d");

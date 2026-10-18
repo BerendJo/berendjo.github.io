@@ -28,7 +28,7 @@
   const sctx = cStatic.getContext("2d");
   const lctx = cLive.getContext("2d");
   const nctx = cNotes.getContext("2d");
-  const paper = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim() || "#fff4f4";
+  const paper = "#fff4f4";   // drawn light; the canvas filter flips it with the theme
 
   let img, grid, base;                 // base = glyph per cell of the resting speaker
   let visible = false, running = false, raf = 0, prev = 0, beat = 0;

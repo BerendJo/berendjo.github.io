@@ -18,7 +18,7 @@
 
   const IN = 2.4, OUT = 1.5;                 // seconds for the full change, there and back
   const calm = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const paper = getComputedStyle(document.documentElement).getPropertyValue("--paper").trim() || "#fff4f4";
+  const paper = "#fff4f4";   // drawn light; the canvas filter flips it with the theme
   const hash = (n) => { const v = Math.sin(n * 127.1 + 311.7) * 43758.5453; return v - Math.floor(v); };
 
   lib.morph = function morph(opts) {
