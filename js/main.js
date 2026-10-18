@@ -154,13 +154,21 @@
   const initial = saved || ((navigator.language || "nl").toLowerCase().startsWith("nl") ? "nl" : "en");
   if (initial !== "nl") setLang(initial);
 
-  /* scroll reveal: IntersectionObserver, one-shot (no scroll listeners) */
+  /* scroll reveal: IntersectionObserver, one-shot (no scroll listeners).
+     ascii-reveal.js turns each block from ASCII art into the real thing; without it (or with
+     reduced motion) the block just appears. */
   const reveals = document.querySelectorAll(".reveal");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reveal = (el) => {
+    const lib = window.AsciiLib;
+    if (!reduceMotion && lib && lib.revealAscii) lib.revealAscii(el).catch(() => el.classList.add("in"));
+    else el.classList.add("in");
+  };
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (!e.isIntersecting) return;
-        e.target.classList.add("in");
+        reveal(e.target);
         io.unobserve(e.target);
       });
     }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });

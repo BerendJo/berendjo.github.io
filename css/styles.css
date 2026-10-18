@@ -471,11 +471,13 @@ html { scrollbar-color: var(--ink) var(--paper); }
   .tile:hover .tile-name, .tile:focus-visible .tile-name { background-size: 100% 3px; }
 }
 
-/* scroll reveal: content stays visible without JS or with reduced motion */
+/* scroll reveal: content stays visible without JS or with reduced motion.
+   The block is hidden until ascii-reveal.js has put its ASCII cover on, then it floats up
+   (cover and all) while the ASCII resolves into the real content. */
 @media (prefers-reduced-motion: no-preference) {
   .js .reveal:not(.in) { opacity: 0; transform: translateY(28px); }
   .js .reveal {
-    transition: opacity 700ms var(--ease-out), transform 700ms var(--ease-out);
+    transition: opacity 800ms var(--ease-out), transform 900ms var(--ease-out);
   }
 }
 
